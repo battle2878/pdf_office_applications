@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Toolkit - Complete PDF Management Suite</title>
+  	<link rel="stylesheet" href="./index.css">
+	
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📄 PDF Toolkit</h1>
+            <p>Complete PDF Management Suite - Merge, Split, Convert, and More!</p>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🔗</div>
+                    <div>	
+                        <div class="tool-title">PDF Merging</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Combine multiple PDF files into a single document. Drag and drop to reorder files before merging.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('mergeFiles').click()">
+                    <div class="drop-icon">📁</div>
+                    <div class="drop-text">Drop PDF files here or click to browse</div>
+                    <small>Supports multiple PDF files</small>
+                </div>
+                <input type="file" id="mergeFiles" class="file-input" multiple accept=".pdf">
+                
+                <div id="mergeFileList" class="file-list"></div>
+                
+                <div class="options-panel" id="mergeOptions" style="display: none;">
+                    <div class="options-title">Merge Options</div>
+                    <div class="form-group">
+                        <label for="mergeOrder">File Order</label>
+                        <select id="mergeOrder">
+                            <option value="custom">Custom Order (Drag to Reorder)</option>
+                            <option value="alphabetical">Alphabetical</option>
+                            <option value="size">By File Size</option>
+                            <option value="date">By Date Modified</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="mergePDFs" style="display: none;">
+                    🔗 Merge PDFs
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">✂️</div>
+                    <div>
+                        <div class="tool-title">PDF Splitting</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Split a single PDF into multiple documents by pages, ranges, or fixed intervals.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('splitFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="splitFile" class="file-input" accept=".pdf">
+                
+                <div class="options-panel" id="splitOptions" style="display: none;">
+                    <div class="options-title">Split Options</div>
+                    <div class="form-group">
+                        <label for="splitMethod">Split Method</label>
+                        <select id="splitMethod">
+                            <option value="pages">Every N Pages</option>
+                            <option value="ranges">Custom Page Ranges</option>
+                            <option value="single">Each Page Separately</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="pagesPerSplit">
+                        <label for="splitPages">Pages per Split</label>
+                        <input type="number" id="splitPages" value="1" min="1">
+                    </div>
+                    <div class="form-group" id="customRanges" style="display: none;">
+                        <label for="pageRanges">Page Ranges (e.g., 1-5, 6-10, 11-15)</label>
+                        <input type="text" id="pageRanges" placeholder="1-5, 6-10, 11-15">
+                    </div>
+                </div>
+                
+                <button class="btn btn-warning" id="splitPDF" style="display: none;">
+                    ✂️ Split PDF
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📋</div>
+                    <div>
+                        <div class="tool-title">Page Extraction</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Extract specific pages or page ranges from a PDF document into a new file.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('extractFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="extractFile" class="file-input" accept=".pdf">
+                
+                <div id="extractPages" class="page-thumbnails" style="display: none;"></div>
+                
+                <div class="options-panel" id="extractOptions" style="display: none;">
+                    <div class="options-title">Extraction Options</div>
+                    <div class="form-group">
+                        <label for="extractMethod">Selection Method</label>
+                        <select id="extractMethod">
+                            <option value="click">Click to Select Pages</option>
+                            <option value="range">Enter Page Range</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="extractRange" style="display: none;">
+                        <label for="extractPageRange">Page Range (e.g., 1-5, 8, 10-12)</label>
+                        <input type="text" id="extractPageRange" placeholder="1-5, 8, 10-12">
+                    </div>
+                </div>
+                
+                <button class="btn btn-success" id="extractSelectedPages" style="display: none;">
+                    📋 Extract Pages
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🔄</div>
+                    <div>
+                        <div class="tool-title">Page Reordering</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Drag and drop page thumbnails to reorder pages within your PDF document.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('reorderFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="reorderFile" class="file-input" accept=".pdf">
+                
+                <div id="reorderPages" class="page-thumbnails" style="display: none;"></div>
+                
+                <button class="btn btn-primary" id="saveReorderedPDF" style="display: none;">
+                    🔄 Save Reordered PDF
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🔄</div>
+                    <div>
+                        <div class="tool-title">Page Rotation</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Rotate individual pages or all pages in your PDF by 90, 180, or 270 degrees.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('rotateFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="rotateFile" class="file-input" accept=".pdf">
+                
+                <div class="options-panel" id="rotateOptions" style="display: none;">
+                    <div class="options-title">Rotation Options</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="rotateAngle">Rotation Angle</label>
+                            <select id="rotateAngle">
+                                <option value="90">90° Clockwise</option>
+                                <option value="180">180° (Upside Down)</option>
+                                <option value="270">270° (90° Counter-clockwise)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rotateScope">Apply To</label>
+                            <select id="rotateScope">
+                                <option value="all">All Pages</option>
+                                <option value="selected">Selected Pages</option>
+                                <option value="range">Page Range</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="rotateRangeInput" style="display: none;">
+                        <label for="rotatePageRange">Page Range (e.g., 1-5, 8, 10-12)</label>
+                        <input type="text" id="rotatePageRange" placeholder="1-5, 8, 10-12">
+                    </div>
+                </div>
+                
+                <div id="rotatePages" class="page-thumbnails" style="display: none;"></div>
+                
+                <button class="btn btn-warning" id="rotatePDF" style="display: none;">
+                    🔄 Rotate Pages
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🗜️</div>
+                    <div>
+                        <div class="tool-title">PDF Compression</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Reduce PDF file size while maintaining quality. Choose from different compression levels.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('compressFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="compressFile" class="file-input" accept=".pdf">
+                
+                <div class="options-panel" id="compressOptions" style="display: none;">
+                    <div class="options-title">Compression Options</div>
+                    <div class="form-group">
+                        <label for="compressionLevel">Compression Level</label>
+                        <select id="compressionLevel">
+                            <option value="low">Low Compression (High Quality)</option>
+                            <option value="medium" selected>Medium Compression (Balanced)</option>
+                            <option value="high">High Compression (Smaller Size)</option>
+                            <option value="extreme">Extreme Compression (Minimum Size)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="optimizeImages"> Optimize Images
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="removeMetadata"> Remove Metadata
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-success" id="compressPDF" style="display: none;">
+                    🗜️ Compress PDF
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🖼️</div>
+                    <div>
+                        <div class="tool-title">PDF to Image/Text</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Convert PDF pages to images (JPG, PNG) or extract text content from your PDF.
+                </div>
+                
+                <div class="file-drop-zone" onclick="document.getElementById('convertFromFile').click()">
+                    <div class="drop-icon">📄</div>
+                    <div class="drop-text">Drop a PDF file here or click to browse</div>
+                    <small>Single PDF file only</small>
+                </div>
+                <input type="file" id="convertFromFile" class="file-input" accept=".pdf">
+                
+                <div class="conversion-options" id="fromPdfOptions" style="display: none;">
+                    <div class="conversion-option" data-type="jpg">
+                        <div class="conversion-icon">🖼️</div>
+                        <div>Convert to JPG</div>
+                    </div>
+                    <div class="conversion-option" data-type="png">
+                        <div class="conversion-icon">🖼️</div>
+                        <div>Convert to PNG</div>
+                    </div>
+                    <div class="conversion-option" data-type="text">
+                        <div class="conversion-icon">📝</div>
+                        <div>Extract Text</div>
+                    </div>
+                </div>
+                
+                <div class="options-panel" id="imageConvertOptions" style="display: none;">
+                    <div class="options-title">Image Conversion Options</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="imageQuality">Image Quality</label>
+                            <select id="imageQuality">
+                                <option value="low">Low (Smaller Size)</option>
+                                <option value="medium" selected>Medium (Balanced)</option>
+                                <option value="high">High (Best Quality)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageDPI">DPI (Resolution)</label>
+                            <select id="imageDPI">
+                                <option value="72">72 DPI (Web)</option>
+                                <option value="150" selected>150 DPI (Standard)</option>
+                                <option value="300">300 DPI (Print Quality)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="convertFromPDF" style="display: none;">
+                    🔄 Convert PDF
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📄</div>
+                    <div>
+                        <div class="tool-title">Image/Text to PDF</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    Convert images (JPG, PNG) or text files into new PDF documents.
+                </div>
+                
+                <div class="conversion-options">
+                    <div class="conversion-option" data-type="images" onclick="selectConversionType('images')">
+                        <div class="conversion-icon">🖼️</div>
+                        <div>Images to PDF</div>
+                    </div>
+                    <div class="conversion-option" data-type="text" onclick="selectConversionType('text')">
+                        <div class="conversion-icon">📝</div>
+                        <div>Text to PDF</div>
+                    </div>
+                </div>
+                
+                <div id="imagesToPdfSection" style="display: none;">
+                    <div class="file-drop-zone" onclick="document.getElementById('imageFiles').click()">
+                        <div class="drop-icon">🖼️</div>
+                        <div class="drop-text">Drop image files here or click to browse</div>
+                        <small>Supports JPG, PNG, GIF, BMP</small>
+                    </div>
+                    <input type="file" id="imageFiles" class="file-input" multiple accept="image/*">
+                    
+                    <div id="imageFileList" class="file-list"></div>
+                    
+                    <div class="options-panel" id="imageToPdfOptions" style="display: none;">
+                        <div class="options-title">PDF Creation Options</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pageSize">Page Size</label>
+                                <select id="pageSize">
+                                    <option value="A4" selected>A4</option>
+                                    <option value="Letter">Letter</option>
+                                    <option value="Legal">Legal</option>
+                                    <option value="A3">A3</option>
+                                    <option value="fit">Fit to Image</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageLayout">Image Layout</label>
+                                <select id="imageLayout">
+                                    <option value="fit" selected>Fit to Page</option>
+                                    <option value="center">Center on Page</option>
+                                    <option value="stretch">Stretch to Fill</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="textToPdfSection" style="display: none;">
+                    <div class="file-drop-zone" onclick="document.getElementById('textFiles').click()">
+                        <div class="drop-icon">📝</div>
+                        <div class="drop-text">Drop text files here or click to browse</div>
+                        <small>Supports TXT files</small>
+                    </div>
+                    <input type="file" id="textFiles" class="file-input" multiple accept=".txt">
+                    
+                    <div class="form-group">
+                        <label for="textInput">Or Enter Text Directly</label>
+                        <textarea id="textInput" rows="6" placeholder="Enter your text here..."></textarea>
+                    </div>
+                    
+                    <div class="options-panel">
+                        <div class="options-title">Text PDF Options</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fontSize">Font Size</label>
+                                <select id="fontSize">
+                                    <option value="10">10pt</option>
+                                    <option value="12" selected>12pt</option>
+                                    <option value="14">14pt</option>
+                                    <option value="16">16pt</option>
+                                    <option value="18">18pt</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fontFamily">Font Family</label>
+                                <select id="fontFamily">
+                                    <option value="Arial" selected>Arial</option>
+                                    <option value="Times">Times New Roman</option>
+                                    <option value="Courier">Courier New</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-success" id="convertToPDF" style="display: none;">
+                    📄 Create PDF
+                </button>
+            </div>
+        </div>
+
+        <div id="progressSection" style="display: none;">
+            <div class="tool-card">
+                <h3>Processing...</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div id="statusMessage" class="status-message status-info">
+                    Initializing...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="processingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 Processing Your Request</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="modalProgressFill"></div>
+                </div>
+                <div id="modalStatusMessage" class="status-message status-info">
+                    Please wait while we process your PDF...
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="cancelProcessing()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentFiles = [];
+        let selectedPages = [];
+        let currentConversionType = null;
+        let processingCancelled = false;
+        let currentPageCount = 0;
+
+       
+        function init() {
+            setupEventListeners();
+            setupDragAndDrop();
+        }
+
+        function setupEventListeners() {
+    
+        document.getElementById('mergePDFs').addEventListener('click', mergePDFs);
+        document.getElementById('splitPDF').addEventListener('click', splitPDF);
+        document.getElementById('extractSelectedPages').addEventListener('click', extractPages);
+        document.getElementById('saveReorderedPDF').addEventListener('click', saveReorderedPDF);
+        document.getElementById('rotatePDF').addEventListener('click', rotatePDF);
+        document.getElementById('compressPDF').addEventListener('click', compressPDF);
+        document.getElementById('convertFromPDF').addEventListener('click', convertFromPDF);
+        document.getElementById('convertToPDF').addEventListener('click', convertToPDF);
+
+        document.getElementById('splitMethod').addEventListener('change', handleSplitMethodChange);
+        document.getElementById('extractMethod').addEventListener('change', handleExtractMethodChange);
+        document.getElementById('rotateScope').addEventListener('change', handleRotateScopeChange);
+
+        // File drop zone now triggers the native file dialog
+        document.querySelectorAll('.file-drop-zone').forEach(zone => {
+            zone.addEventListener('click', async (e) => {
+                if (zone.closest('.tool-card').querySelector('.tool-title').textContent === 'PDF Merging') {
+                    e.preventDefault();
+                    const result = await window.electronAPI.selectMergeFiles();
+                    if (result.success) {
+                        currentFiles = result.filePaths;
+                        displayMergeFiles(currentFiles);
+                        document.getElementById('mergeOptions').style.display = 'block';
+                        document.getElementById('mergePDFs').style.display = 'inline-flex';
+                    } else {
+                        showStatus(result.message, 'error');
+                    }
+                }
+            });
+        });
+    }
+
+       function setupDragAndDrop() {
+        const dropZones = document.querySelectorAll('.file-drop-zone');
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+            zone.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                zone.classList.add('active');
+
+                // This is the new, crucial step. We use the file paths from the drag and drop event.
+                const filePaths = Array.from(e.dataTransfer.files).map(file => file.path);
+                if (zone.closest('.tool-card').querySelector('.tool-title').textContent === 'PDF Merging') {
+                    currentFiles = filePaths;
+                    displayMergeFiles(currentFiles);
+                    document.getElementById('mergeOptions').style.display = 'block';
+                    document.getElementById('mergePDFs').style.display = 'inline-flex';
+                }
+                // We'll need to handle other drop zones separately
+            });
+        });
+    }
+
+        function handleDroppedFiles(zone, files) {
+            // Determine which tool this drop zone belongs to
+            const toolCard = zone.closest('.tool-card');
+            const toolTitle = toolCard.querySelector('.tool-title').textContent;
+            
+            switch(toolTitle) {
+                case 'PDF Merging':
+                    simulateFileInput('mergeFiles', files);
+                    break;
+                case 'PDF Splitting':
+                case 'Page Extraction':
+                case 'Page Reordering':
+                case 'Page Rotation':
+                case 'PDF Compression':
+                case 'PDF to Image/Text':
+                    if (files.length > 0) {
+                        simulateFileInput(getFileInputId(toolTitle), [files[0]]);
+                    }
+                    break;
+                case 'Image/Text to PDF':
+                    if (currentConversionType === 'images') {
+                        simulateFileInput('imageFiles', files);
+                    } else if (currentConversionType === 'text') {
+                        simulateFileInput('textFiles', files);
+                    }
+                    break;
+            }
+        }
+
+        function getFileInputId(toolTitle) {
+            const mapping = {
+                'PDF Splitting': 'splitFile',
+                'Page Extraction': 'extractFile',
+                'Page Reordering': 'reorderFile',
+                'Page Rotation': 'rotateFile',
+                'PDF Compression': 'compressFile',
+                'PDF to Image/Text': 'convertFromFile'
+            };
+            return mapping[toolTitle];
+        }
+
+        function simulateFileInput(inputId, files) {
+            const input = document.getElementById(inputId);
+            const dt = new DataTransfer();
+            files.forEach(file => dt.items.add(file));
+            input.files = dt.files;
+            input.dispatchEvent(new Event('change'));
+        }
+
+        // File handling functions
+        function handleMergeFiles(e) {
+            const files = Array.from(e.target.files);
+            currentFiles = files;
+            displayMergeFiles(files);
+            document.getElementById('mergeOptions').style.display = 'block';
+            document.getElementById('mergePDFs').style.display = 'inline-flex';
+        }
+
+        function displayMergeFiles(files) {
+        const fileList = document.getElementById('mergeFileList');
+        fileList.innerHTML = '';
+
+        files.forEach((file, index) => {
+            const fileName = typeof file === 'string' ? file.split(/[\\/]/).pop() : file.name;
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.draggable = true;
+            fileItem.dataset.index = index;
+
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <div class="file-name">${fileName}</div>
+                    <div class="file-size">${/* You may need to get file size from backend or handle it differently */'N/A'}</div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn btn-danger" onclick="removeMergeFile(${index})">Remove</button>
+                </div>
+            `;
+            // Drag and drop event listeners for reordering
+            fileItem.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', index); });
+            fileItem.addEventListener('dragover', (e) => { e.preventDefault(); });
+            fileItem.addEventListener('drop', (e) => { e.preventDefault(); const draggedIndex = parseInt(e.dataTransfer.getData('text/plain')); const targetIndex = parseInt(fileItem.dataset.index); if (draggedIndex !== targetIndex) { reorderMergeFiles(draggedIndex, targetIndex); }});
+            fileList.appendChild(fileItem);
+        });
+    }
+
+        function removeMergeFile(index) {
+        currentFiles.splice(index, 1);
+        displayMergeFiles(currentFiles);
+        if (currentFiles.length === 0) {
+            document.getElementById('mergeOptions').style.display = 'none';
+            document.getElementById('mergePDFs').style.display = 'none';
+        }
+    }
+
+        function reorderMergeFiles(fromIndex, toIndex) {
+        const file = currentFiles.splice(fromIndex, 1)[0];
+        currentFiles.splice(toIndex, 0, file);
+        displayMergeFiles(currentFiles);
+    }
+
+        function handleSplitFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                // In a real app, you would get the actual page count
+                const simulatedPageCount = 10;
+                currentPageCount = simulatedPageCount;
+                document.getElementById('splitOptions').style.display = 'block';
+                document.getElementById('splitPDF').style.display = 'inline-flex';
+            }
+        }
+
+        function handleSplitMethodChange(e) {
+            const method = e.target.value;
+            const pagesPerSplit = document.getElementById('pagesPerSplit');
+            const customRanges = document.getElementById('customRanges');
+            
+            pagesPerSplit.style.display = method === 'pages' ? 'block' : 'none';
+            customRanges.style.display = method === 'ranges' ? 'block' : 'none';
+        }
+
+        function handleExtractFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                const simulatedPageCount = 10;
+                currentPageCount = simulatedPageCount;
+                displayPageThumbnails('extractPages', simulatedPageCount);
+                document.getElementById('extractOptions').style.display = 'block';
+                document.getElementById('extractSelectedPages').style.display = 'inline-flex';
+            }
+        }
+
+        function handleExtractMethodChange(e) {
+            const method = e.target.value;
+            const extractRange = document.getElementById('extractRange');
+            extractRange.style.display = method === 'range' ? 'block' : 'none';
+        }
+
+        function handleReorderFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                const simulatedPageCount = 8;
+                currentPageCount = simulatedPageCount;
+                displayPageThumbnails('reorderPages', simulatedPageCount);
+                document.getElementById('saveReorderedPDF').style.display = 'inline-flex';
+            }
+        }
+
+        function handleRotateFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                const simulatedPageCount = 6;
+                currentPageCount = simulatedPageCount;
+                document.getElementById('rotateOptions').style.display = 'block';
+                displayPageThumbnails('rotatePages', simulatedPageCount);
+                document.getElementById('rotatePDF').style.display = 'inline-flex';
+            }
+        }
+
+        function handleRotateScopeChange(e) {
+            const scope = e.target.value;
+            const rotateRangeInput = document.getElementById('rotateRangeInput');
+            rotateRangeInput.style.display = scope === 'range' ? 'block' : 'none';
+        }
+
+        function handleCompressFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                document.getElementById('compressOptions').style.display = 'block';
+                document.getElementById('compressPDF').style.display = 'inline-flex';
+            }
+        }
+
+        function handleConvertFromFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentFiles = [file];
+                document.getElementById('fromPdfOptions').style.display = 'grid';
+                // You would get the actual page count here
+                currentPageCount = 12;
+            }
+        }
+
+        function selectFromPdfConversion(type) {
+            document.querySelectorAll('#fromPdfOptions .conversion-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            document.querySelector(`#fromPdfOptions .conversion-option[data-type="${type}"]`).classList.add('selected');
+            
+            const imageOptions = document.getElementById('imageConvertOptions');
+            imageOptions.style.display = (type === 'jpg' || type === 'png') ? 'block' : 'none';
+            
+            document.getElementById('convertFromPDF').style.display = 'inline-flex';
+            currentConversionType = type;
+        }
+
+        function selectConversionType(type) {
+            document.querySelectorAll('.conversion-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            document.querySelector(`.conversion-option[data-type="${type}"]`).classList.add('selected');
+            
+            const imagesToPdf = document.getElementById('imagesToPdfSection');
+            const textToPdf = document.getElementById('textToPdfSection');
+            
+            imagesToPdf.style.display = type === 'images' ? 'block' : 'none';
+            textToPdf.style.display = type === 'text' ? 'block' : 'none';
+            
+            currentConversionType = type;
+            if (type === 'images' || type === 'text') {
+                document.getElementById('convertToPDF').style.display = 'inline-flex';
+            } else {
+                document.getElementById('convertToPDF').style.display = 'none';
+            }
+        }
+
+        function handleImageFiles(e) {
+            const files = Array.from(e.target.files);
+            currentFiles = files;
+            displayImageFiles(files);
+            document.getElementById('imageToPdfOptions').style.display = 'block';
+        }
+
+        function displayImageFiles(files) {
+            const fileList = document.getElementById('imageFileList');
+            fileList.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-danger" onclick="removeImageFile(${index})">Remove</button>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeImageFile(index) {
+            currentFiles.splice(index, 1);
+            displayImageFiles(currentFiles);
+            
+            if (currentFiles.length === 0) {
+                document.getElementById('imageToPdfOptions').style.display = 'none';
+                document.getElementById('convertToPDF').style.display = 'none';
+            }
+        }
+
+        function handleTextFiles(e) {
+            const files = Array.from(e.target.files);
+            currentFiles = files;
+            document.getElementById('convertToPDF').style.display = 'inline-flex';
+        }
+
+        function displayPageThumbnails(containerId, pageCount) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            container.style.display = 'grid';
+            
+            for (let i = 1; i <= pageCount; i++) {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = 'page-thumbnail';
+                thumbnail.dataset.page = i;
+                
+                thumbnail.innerHTML = `
+                    <div class="page-preview">📄</div>
+                    <div class="page-number">Page ${i}</div>
+                `;
+                
+                thumbnail.addEventListener('click', () => {
+                    if (containerId === 'extractPages' || containerId === 'rotatePages') {
+                        thumbnail.classList.toggle('selected');
+                        updateSelectedPages();
+                    }
+                });
+                
+                if (containerId === 'reorderPages') {
+                    thumbnail.draggable = true;
+                    thumbnail.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', i);
+                    });
+                    
+                    thumbnail.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                    });
+                    
+                    thumbnail.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        const draggedPage = parseInt(e.dataTransfer.getData('text/plain'));
+                        const targetPage = parseInt(thumbnail.dataset.page);
+                        
+                        if (draggedPage !== targetPage) {
+                            reorderPages(draggedPage, targetPage);
+                        }
+                    });
+                }
+                
+                container.appendChild(thumbnail);
+            }
+        }
+
+        function updateSelectedPages() {
+            selectedPages = Array.from(document.querySelectorAll('.page-thumbnail.selected'))
+                .map(thumb => parseInt(thumb.dataset.page));
+        }
+document.getElementById('mergeFiles').addEventListener('change', handleMergeFiles)
+        // The rest of your functions remain the same. The `mergePDFs` function is now correct
+		async function mergePDFs() {
+        if (currentFiles.length < 2) {
+            showStatus('Please select at least 2 PDF files to merge.', 'error');
+            return;
+        }
+        showProcessingModal();
+        const result = await window.electronAPI.mergePdfs(currentFiles);
+        hideProcessingModal();
+        showStatus(result.message, result.success ? 'success' : 'error');
+    }
+
+        async function splitPDF() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file to split.', 'error');
+                return;
+            }
+            
+            const splitMethod = document.getElementById('splitMethod').value;
+            const splitPages = document.getElementById('splitPages').value;
+            const pageRanges = document.getElementById('pageRanges').value;
+            
+            showProcessingModal();
+            const result = await window.electronAPI.splitPdf(currentFiles[0].path, splitMethod, splitPages, pageRanges);
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function extractPages() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file first.', 'error');
+                return;
+            }
+            
+            const extractMethod = document.getElementById('extractMethod').value;
+            let pagesToExtract = [];
+            if (extractMethod === 'click') {
+                pagesToExtract = selectedPages;
+            } else {
+                pagesToExtract = document.getElementById('extractPageRange').value;
+            }
+            
+            showProcessingModal();
+            const result = await window.electronAPI.extractPages(currentFiles[0].path, pagesToExtract);
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function saveReorderedPDF() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file first.', 'error');
+                return;
+            }
+            
+            showProcessingModal();
+            const reorderedPages = Array.from(document.querySelectorAll('#reorderPages .page-thumbnail')).map(el => parseInt(el.dataset.page));
+            const result = await window.electronAPI.reorderPdf(currentFiles[0].path, reorderedPages);
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function rotatePDF() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file first.', 'error');
+                return;
+            }
+            
+            const rotateAngle = document.getElementById('rotateAngle').value;
+            const rotateScope = document.getElementById('rotateScope').value;
+            const rotatePageRange = document.getElementById('rotatePageRange').value;
+            showProcessingModal();
+            const result = await window.electronAPI.rotatePdf(currentFiles[0].path, rotateAngle, rotateScope, rotatePageRange);
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function compressPDF() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file first.', 'error');
+                return;
+            }
+            
+            const compressionLevel = document.getElementById('compressionLevel').value;
+            const optimizeImages = document.getElementById('optimizeImages').checked;
+            const removeMetadata = document.getElementById('removeMetadata').checked;
+            
+            showProcessingModal();
+            const result = await window.electronAPI.compressPdf(currentFiles[0].path, compressionLevel, optimizeImages, removeMetadata);
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function convertFromPDF() {
+            if (currentFiles.length === 0) {
+                showStatus('Please select a PDF file first.', 'error');
+                return;
+            }
+            
+            if (!currentConversionType) {
+                showStatus('Please select a conversion type.', 'error');
+                return;
+            }
+            
+            const imageQuality = document.getElementById('imageQuality').value;
+            const imageDPI = document.getElementById('imageDPI').value;
+            
+            showProcessingModal();
+            const result = await window.electronAPI.convertFromPdf(currentFiles[0].path, currentConversionType, { imageQuality, imageDPI });
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+
+        async function convertToPDF() {
+            if (currentConversionType === 'images' && currentFiles.length === 0) {
+                showStatus('Please select image files first.', 'error');
+                return;
+            }
+            
+            if (currentConversionType === 'text' && currentFiles.length === 0 && !document.getElementById('textInput').value.trim()) {
+                showStatus('Please select text files or enter text.', 'error');
+                return;
+            }
+            
+            const filePaths = currentFiles.map(file => file.path);
+            const textInput = document.getElementById('textInput').value;
+            const pageSize = document.getElementById('pageSize').value;
+            const imageLayout = document.getElementById('imageLayout').value;
+            
+            showProcessingModal();
+            const result = await window.electronAPI.convertToPdf(currentConversionType, filePaths, textInput, { pageSize, imageLayout });
+            hideProcessingModal();
+            showStatus(result.message, result.success ? 'success' : 'error');
+        }
+        
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showProcessingModal() {
+            document.getElementById('processingModal').style.display = 'block';
+            processingCancelled = false;
+        }
+
+        function hideProcessingModal() {
+            document.getElementById('processingModal').style.display = 'none';
+        }
+
+        function cancelProcessing() {
+            processingCancelled = true;
+            hideProcessingModal();
+            showStatus('Processing cancelled.', 'error');
+        }
+
+        function simulateProcessing(message, callback) {
+            const progressFill = document.getElementById('modalProgressFill');
+            const statusMessage = document.getElementById('modalStatusMessage');
+            
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message status-info';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (processingCancelled) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressFill.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusMessage.textContent = 'Processing complete!';
+                    statusMessage.className = 'status-message status-success';
+                    
+                    setTimeout(() => {
+                        if (!processingCancelled) {
+                            callback();
+                        }
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function downloadFile(filename) {
+            // Simulate file download
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = filename;
+            link.textContent = `Download ${filename}`;
+            link.style.display = 'block';
+            link.style.margin = '10px 0';
+            link.style.color = '#3498db';
+            link.style.textDecoration = 'none';
+            link.style.fontWeight = 'bold';
+            
+            link.onclick = (e) => {
+                e.preventDefault();
+                alert(`In a real application, ${filename} would be downloaded now.`);
+            };
+            
+            // Add to the first tool card for visibility
+            const firstCard = document.querySelector('.tool-card');
+            firstCard.appendChild(link);
+            
+            // Remove after 10 seconds
+            setTimeout(() => {
+                if (link.parentNode) {
+                    link.parentNode.removeChild(link);
+                }
+            }, 10000);
+        }
+
+        function downloadMultipleFiles(filenames) {
+            filenames.forEach((filename, index) => {
+                setTimeout(() => downloadFile(filename), index * 500);
+            });
+        }
+
+        function showStatus(message, type) {
+            // Create a temporary status message
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.position = 'fixed';
+            statusDiv.style.top = '20px';
+            statusDiv.style.right = '20px';
+            statusDiv.style.zIndex = '9999';
+            statusDiv.style.maxWidth = '400px';
+            
+            document.body.appendChild(statusDiv);
+            
+            setTimeout(() => {
+                if (statusDiv.parentNode) {
+                    statusDiv.parentNode.removeChild(statusDiv);
+                }
+            }, 5000);
+        }
+
+		async function handleNativeFileSelection() {
+			
+			const result = await window.electronAPI.selectMergeFiles();
+			if (result.success) {
+				
+				currentFiles = result.filePaths;
+				displayMergeFiles(currentFiles);
+				document.getElementById('mergeOptions').style.display = 'block';
+				document.getElementById('mergePDFs').style.display = 'inline-flex';
+			} else {
+				showStatus(result.message, 'error');
+			}
+		}
+		
+document.querySelector('#mergeFiles').addEventListener('click', handleNativeFileSelection);
+
+     
+        init();
+    </script>
+</body>
+</html>
